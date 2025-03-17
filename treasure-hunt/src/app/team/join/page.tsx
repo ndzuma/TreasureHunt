@@ -5,12 +5,33 @@ import Image from "next/image";
 import { InputTeamName } from "~/components/input-field";
 import { MainButtonWithOnClick } from "~/components/main-button";
 import { useRouter } from "next/navigation";
+import { useUserStore } from "~/store/userStore";
 
 export default function CreatePage() {
   const router = useRouter();
+  const userId = useUserStore((state) => state.userId);
+
   
-  function handleJoinTeam() { 
-    router.push("/")
+  async function handleJoinTeam() {
+    if (!userId) {
+      return;
+    }
+    
+    try {
+      const result = await loginUser({user: username,user_type: user_type});
+
+      if (result.success) {
+        console.log(
+          `User ${result.isNewUser ? "created" : "logged in"} successfully`,
+        );
+        router.push("/team");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Failed to login. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   }
   
   return (

@@ -51,11 +51,6 @@ export default function HomePage() {
       const result = await loginUser({user: username,user_type: user_type});
 
       if (result.success) {
-        setUser(
-          result.userId, 
-          username,
-          result.user?.team || null
-        );
         console.log(
           `User ${result.isNewUser ? "created" : "logged in"} successfully`,
         );
