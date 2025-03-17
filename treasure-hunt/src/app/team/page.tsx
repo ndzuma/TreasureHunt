@@ -11,7 +11,7 @@ export default function HomePage() {
         <h1 className="text-4xl font-bold">QuestConnect</h1>
         <Image src="/logo.png" width={200} height={200} alt="Some" />
         <MainButton title="Join team" page="/" />
-        <MainButton title="Create team" page="/" />
+        <MainButton title="Create team" page="/team/create" />
         <Button>Log in</Button>
       </main>
     </div>
