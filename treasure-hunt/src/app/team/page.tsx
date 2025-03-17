@@ -14,7 +14,7 @@ export default function HomePage() {
         <Image src="/logo.png" width={200} height={200} alt="Some" />
         <MainButton title="Join team" page="/" />
         <MainButton title="Create team" page="/team/create" />
-        <Button>Log in</Button>
+        <Button className="rounded-lg bg-[#4AA5FF] border-[1px] border-black px-4 py-2 text-white" onClick={handleLogOut}>Log out</Button>
       </main>
     </div>
   );
