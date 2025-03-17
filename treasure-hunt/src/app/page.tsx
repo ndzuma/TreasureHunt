@@ -9,10 +9,12 @@ import { useState } from "react";
 
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
+import { useUserStore } from "~/store/userStore";
 
 export default function HomePage() {
   const loginUser = useMutation(api.users.loginUser);
   const router = useRouter();
+  const setUser = useUserStore((state) => state.setUser);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -48,8 +50,12 @@ export default function HomePage() {
     try {
       const result = await loginUser({user: username,user_type: user_type});
 
-      // If login was successful, redirect to the team page
       if (result.success) {
+        setUser(
+          result.userId, 
+          username,
+          result.user?.team || null
+        );
         console.log(
           `User ${result.isNewUser ? "created" : "logged in"} successfully`,
         );

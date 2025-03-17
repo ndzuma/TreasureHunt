@@ -47,7 +47,6 @@ export const joinTeam = mutation({
     teamNumber: v.number() 
   },
   handler: async (ctx, args) => {
-    // Check if the team exists
     const team = await ctx.db
       .query("teams")
       .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
@@ -57,7 +56,6 @@ export const joinTeam = mutation({
       throw new Error(`Team ${args.teamNumber} does not exist`);
     }
     
-    // Update the user with the team number
     await ctx.db.patch(args.userId, {
       team: args.teamNumber
     });
