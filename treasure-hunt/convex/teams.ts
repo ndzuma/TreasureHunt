@@ -44,7 +44,7 @@ export const getNextTeamNumber = query({
 });
 
 export const createTeam = mutation({
-  args: {
+    args: {
     teamName: v.string(),
     creatorId: v.id("users")
   },
