@@ -19,3 +19,19 @@ export function MainButton({ title, page }: MainButtonProps) {
     </button>
   );
 }
+
+interface MainButtonOnClickProps {
+  title: string;
+  onClick?: () => void;
+}
+
+export function MainButtonWithOnClick({ title, onClick }: MainButtonOnClickProps) {
+  return (
+    <button
+      className="rounded-lg bg-[#3CB4CF] border-[1px] border-black px-4 py-2 text-white w-full"
+      onClick={onClick}
+    >
+      {title}
+    </button>
+  );
+}
