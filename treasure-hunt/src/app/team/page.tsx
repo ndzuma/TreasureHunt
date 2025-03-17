@@ -1,11 +1,22 @@
 "use client"
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Header } from "~/components/header";
 import { MainButton } from "~/components/main-button";
 import { Button } from "~/components/ui/button";
+import { useUserStore } from "~/store/userStore";
 
 export default function HomePage() {
+  const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+  const clearUser = useUserStore((state) => state.clearUser);
+  
+  function handleLogOut() { 
+    clearUser()
+    router.push("/")
+  }
+  
   return (
     <div>
       <Header page="/" />
@@ -14,7 +25,7 @@ export default function HomePage() {
         <Image src="/logo.png" width={200} height={200} alt="Some" />
         <MainButton title="Join team" page="/" />
         <MainButton title="Create team" page="/" />
-        <Button>Log in</Button>
+        <Button className="rounded-lg bg-[#4AA5FF] border-[1px] border-black px-4 py-2 text-white" onClick={handleLogOut}>Log out</Button>
       </main>
     </div>
   );

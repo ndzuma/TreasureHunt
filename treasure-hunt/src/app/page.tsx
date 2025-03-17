@@ -14,6 +14,7 @@ import { useUserStore } from "~/store/userStore";
 export default function HomePage() {
   const loginUser = useMutation(api.users.loginUser);
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
   const setUser = useUserStore((state) => state.setUser);
 
   const [username, setUsername] = useState("");
