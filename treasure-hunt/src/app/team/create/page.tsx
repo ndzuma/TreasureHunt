@@ -35,9 +35,13 @@ export default function CreatePage()
           if (newTeam.success == true) {
               router.push("")//page name here
           }
-       }
-
+       }catch (err){
+        console.error("Create a team error", err);
+        
     }
+
+      
+    } 
     return (
         <div>
             <Header page="/team" />
