@@ -8,13 +8,13 @@ import { useUserStore } from "~/store/userStore";
 
 import { api } from "../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function CreatePage()
 {
     const [teamName, setTeamName] = useState("");
     const userid = useUserStore((state) => state.userId)
     const setTeam = useUserStore((state) => state.updateTeam)
-    const getTeam = useMutation(api.teams.getByNames)
     
     const createTeam = useMutation(api.teams.createTeam)
     const router = useRouter()
@@ -25,13 +25,9 @@ export default function CreatePage()
               return;
           }
           
-          const getAll = await getTeam({ teamName: teamName })
-          
         
 
           const newTeam = await createTeam({ teamName: teamName, creatorId:userid })
-          
-          
           if (newTeam.success == true) {
               router.push("")//page name here
           }
