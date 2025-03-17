@@ -7,6 +7,17 @@ export const getAll = query({
   },
 });
 
+export const getByNames = query({
+  args: { teamName: v.string() },
+  handler: async (ctx, args) => {
+    const teams = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Name"), args.teamName))
+      .collect();
+    return teams;
+  },
+});
+
 export const getByNumber = query({
   args: { teamNumber: v.number() },
   handler: async (ctx, args) => {

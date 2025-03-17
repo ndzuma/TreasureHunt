@@ -20,7 +20,7 @@ export default function CreatePage() {
         <Image src="/logo.png" width={200} height={200} alt="Some" />
         <h1 className="text-4xl font-bold">Join a Team</h1>
         <InputTeamName />
-        <MainButtonWithOnClick title="Create Team" onClick={handleJoinTeam}  />
+        <MainButtonWithOnClick title="Join Team" onClick={handleJoinTeam}  />
       </main>
     </div>
   );
