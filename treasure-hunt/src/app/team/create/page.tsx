@@ -3,7 +3,7 @@ import { useMutation } from "convex/react";
 import { createTeam, getAll } from "convex/teams";
 import { Header } from "~/components/header";
 import { InputTeamName } from "~/components/input-field";
-import { MainButton } from "~/components/main-button";
+import { MainButtonWithOnClick } from "~/components/main-button";
 import { useUserStore } from "~/store/userStore";
 
 import { api } from "../../../../convex/_generated/api";
@@ -44,7 +44,7 @@ export default function CreatePage()
             <main className="flex min-h-screen flex-col items-center justify-center bg-[#5776A4] text-white px-6 gap-2.5">
                 <h1 className="text-4xl font-bold">Create a Team</h1> 
                 <InputTeamName onchange={setTeamName}/>
-                <MainButton title = "Create Team" page="/lobby"/>
+                <MainButtonWithOnClick title="Join Team" onClick={CreateTeam}  />
             
             
             </main>    
