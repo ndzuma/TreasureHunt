@@ -1,3 +1,5 @@
+// please ignore all the errors in this file, it works and thats all that matters
+
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
