@@ -1,9 +1,18 @@
+"use client"
+
 import { Header } from "~/components/header";
 import Image from "next/image";
 import { InputTeamName } from "~/components/input-field";
-import { MainButton } from "~/components/main-button";
+import { MainButtonWithOnClick } from "~/components/main-button";
+import { useRouter } from "next/navigation";
 
 export default function CreatePage() {
+  const router = useRouter();
+  
+  function handleJoinTeam() { 
+    router.push("/")
+  }
+  
   return (
     <div>
       <Header page="/team" />
@@ -11,7 +20,7 @@ export default function CreatePage() {
         <Image src="/logo.png" width={200} height={200} alt="Some" />
         <h1 className="text-4xl font-bold">Join a Team</h1>
         <InputTeamName />
-        <MainButton title="Create Team" page="/lobby"  />
+        <MainButtonWithOnClick title="Create Team" onClick={handleJoinTeam}  />
       </main>
     </div>
   );
