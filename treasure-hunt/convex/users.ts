@@ -63,3 +63,23 @@ export const joinTeam = mutation({
     return { success: true, teamId: team._id };
   },
 });
+
+export const joinTeamByName = mutation({
+  args: { userId: v.id("users"), teamName: v.string() },
+  handler: async (ctx, args) => {
+    const team = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Name"), args.teamName))
+      .first();
+    
+    if (!team) {
+      throw new Error(`Team ${args.teamName} does not exist`);
+    }
+    
+    await ctx.db.patch(args.userId, {
+      team: team.Team_Number
+    });
+    
+    return { success: true, teamId: team._id };
+  },
+});

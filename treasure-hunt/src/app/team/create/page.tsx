@@ -19,16 +19,17 @@ export default function CreatePage() {
   const router = useRouter();
 
   async function CreateTeam() {
+    if (!userId) {
+      return;
+    }
+    
     try {
-      if (!userId) {
-        return;
-      }
-
       const newTeam = await createTeam({
         teamName: teamName,
         creatorId: userId,
       });
       if (newTeam.success == true) {
+        setTeam(newTeam.teamId);
         router.push("/game"); //page name here
       }
     } catch (err) {
