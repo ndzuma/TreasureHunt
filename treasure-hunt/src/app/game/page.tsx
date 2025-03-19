@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { api } from "convex/_generated/api";
 import { useQuery } from "convex/react";
 
-export default function CreatePage() {
+export default function GamePage() {
   const router = useRouter();
   const userId = useUserStore((state) => state.userId);
   const teamNumber = useUserStore((state) => state.teamNumber);

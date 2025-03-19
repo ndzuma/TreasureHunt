@@ -17,3 +17,14 @@ export const getClueByName = query({
     return clue;
   },
 });
+
+export const getClueByNumber = query({
+  args: { clueNumber: v.number() },
+  handler: async (ctx, args) => {
+    const clue = await ctx.db
+      .query("clues")
+      .filter((q) => q.eq(q.field("Clue_Number"), args.clueNumber))
+      .first();
+    return clue;
+  },
+});
