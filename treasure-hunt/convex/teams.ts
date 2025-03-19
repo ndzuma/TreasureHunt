@@ -145,6 +145,7 @@ export const updateTime = mutation({
   }
 });
 
+// start game func that also saves the start time
 export const startGame = mutation({
   args: { teamNumber: v.number() },
   handler: async (ctx, args) => {
@@ -157,12 +158,13 @@ export const startGame = mutation({
       throw new Error(`Team ${args.teamNumber} does not exist`);
     }
     
-    await ctx.db.patch(team._id, { In_Progress: true });
+    await ctx.db.patch(team._id, { In_Progress: true, StartTime: Date.now() });
     
     return { success: true };
   }
 });
 
+// end game func that also saves the end time
 export const endGame = mutation({
   args: { teamNumber: v.number() },
   handler: async (ctx, args) => {
@@ -175,11 +177,12 @@ export const endGame = mutation({
       throw new Error(`Team ${args.teamNumber} does not exist`);
     }
     
-    await ctx.db.patch(team._id, { In_Progress: false });
+    await ctx.db.patch(team._id, { In_Progress: false, EndTime: Date.now() });
     
     return { success: true };
   }
 });
+ 
 
 export const getGameStatus = query({
   args: { teamNumber: v.number() },
