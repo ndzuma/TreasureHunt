@@ -15,6 +15,7 @@ import { api } from "convex/_generated/api";
 export default function () {
     
     const getAllClue = useQuery(api.clues.getAllClues);
+    
 
     return (
       <div>
@@ -24,7 +25,7 @@ export default function () {
                 <TimeRemaining />
                 <div className="grid grid-cols-2 gap-4">
                     {getAllClue?.map((clue) => (
-                        <ClueButton key={clue._id} title={clue.Clue_Name} number={clue.Clue_Number} />        
+                        <ClueButton key={clue._id} title={"Clue " + clue.Clue_Number} number={clue.Clue_Number} />        
 
                     ))}
 
