@@ -51,7 +51,7 @@ export default function CreatePage() {
   }
 
   const handleTeamNameChange = (value: string) => {
-    setTeamName(value);
+    setTeamName(value.toUpperCase());
   };
 
   return (
