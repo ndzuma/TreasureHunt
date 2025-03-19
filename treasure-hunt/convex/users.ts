@@ -83,3 +83,13 @@ export const joinTeamByName = mutation({
     return { success: true, teamId: team._id, teamNumber: team.Team_Number };
   },
 });
+
+export const getUsersInTeam = query({
+  args: { teamNumber: v.number() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("users")
+      .filter((q) => q.eq(q.field("team"), args.teamNumber))
+      .collect();
+  },
+});

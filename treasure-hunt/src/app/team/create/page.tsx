@@ -1,6 +1,5 @@
 "use client";
 import { useMutation } from "convex/react";
-import { createTeam, getAll } from "convex/teams";
 import { Header } from "~/components/header";
 import { InputTeamName } from "~/components/input-field";
 import { MainButtonWithOnClick } from "~/components/main-button";
@@ -52,7 +51,7 @@ export default function CreatePage() {
   }
 
   const handleTeamNameChange = (value: string) => {
-    setTeamName(value);
+    setTeamName(value.toUpperCase());
   };
 
   return (
