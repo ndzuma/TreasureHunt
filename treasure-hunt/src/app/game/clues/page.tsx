@@ -12,7 +12,7 @@ import { api } from "convex/_generated/api";
 
 
 
-export default function () {
+export default function  createCluesPage() {
     
     const getAllClue = useQuery(api.clues.getAllClues);
     
