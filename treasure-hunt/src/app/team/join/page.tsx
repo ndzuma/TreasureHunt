@@ -6,7 +6,7 @@ import { InputTeamName } from "~/components/input-field";
 import { MainButtonWithOnClick } from "~/components/main-button";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "~/store/userStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "convex/_generated/api";
 
@@ -16,12 +16,33 @@ export default function CreatePage() {
   const userId = useUserStore((state) => state.userId);
   const setTeam = useUserStore((state) => state.updateTeam);
   const joinTeam = useMutation(api.users.joinTeamByName);
+  const [mounted, setMounted] = useState(false);
+  
+  // Handle hydration issues
+  useEffect(() => {
+    setMounted(true);
+    console.log("Current user state:", {
+      userId: useUserStore.getState().userId,
+      username: useUserStore.getState().username,
+      teamNumber: useUserStore.getState().teamNumber
+    });
+  }, []);
+  
+  // Don't render until after hydration
+  if (!mounted) {
+    return null;
+  }
 
   async function handleJoinTeam() {
     if (!userId) {
       console.log("no user id");
       return;
     }
+    
+    if (!teamName.trim()) {
+      console.error("Team name cannot be empty");
+      return;
+    } 
     
     try {
       const result = await joinTeam({
@@ -31,7 +52,8 @@ export default function CreatePage() {
       console.log("here", result);
 
       if (result.success) {
-        setTeam(result.teamId);
+        const teamNumber = result.teamNumber || 0;
+        setTeam(teamNumber);
         router.push("/game");
       }
     } catch (err) {

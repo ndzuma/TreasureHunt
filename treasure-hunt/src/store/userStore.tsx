@@ -1,7 +1,7 @@
 // please ignore all the errors in this file, it works and thats all that matters
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 type UserStore = {
   userId: string | null;
@@ -27,6 +27,14 @@ export const useUserStore = create<UserStore>()(
     }),
     {
       name: 'user-storage',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ 
+        userId: state.userId, 
+        username: state.username,
+        teamNumber: state.teamNumber 
+      }),
     }
   )
 );
+
+

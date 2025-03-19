@@ -8,17 +8,30 @@ import { useUserStore } from "~/store/userStore";
 
 import { api } from "../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+
 
 export default function CreatePage() {
   const [teamName, setTeamName] = useState("");
   const userId = useUserStore((state) => state.userId);
   const setTeam = useUserStore((state) => state.updateTeam);
+  const [mounted, setMounted] = useState(false);
 
   const createTeam = useMutation(api.teams.createTeam);
   const router = useRouter();
+  
+  // Handle hydration issues
+    useEffect(() => {
+      setMounted(true);
+    }, []);
+  
+    // Don't render component content until after hydration
+    if (!mounted) {
+      return null;
+    }
 
   async function CreateTeam() {
+    
     if (!userId) {
       return;
     }
@@ -29,7 +42,8 @@ export default function CreatePage() {
         creatorId: userId,
       });
       if (newTeam.success == true) {
-        setTeam(newTeam.teamId);
+        console.log("Team created successfully:", newTeam);
+        setTeam(newTeam.teamNumber);
         router.push("/game"); //page name here
       }
     } catch (err) {

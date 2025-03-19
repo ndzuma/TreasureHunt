@@ -20,14 +20,14 @@ export default function HomePage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  
-  function get_user_type() { 
+
+  function get_user_type() {
     if (username.substring(0, 2).toLowerCase() == "ku") {
-      return "Lecturer"
+      return "Lecturer";
     } else if (username.charAt(0).toLowerCase() == "k") {
-      return "Student"
-    } else { 
-      return "Invalid"
+      return "Student";
+    } else {
+      return "Invalid";
     }
   }
 
@@ -39,21 +39,22 @@ export default function HomePage() {
 
     setIsLoading(true);
     setError("");
-    
-    const user_type = get_user_type()
+
+    const user_type = get_user_type();
     if (user_type == "Invalid") {
       setError("Invalid username");
       setIsLoading(false);
       return;
     }
-    
+
     try {
-      const result = await loginUser({user: username,user_type: user_type});
+      const result = await loginUser({ user: username, user_type: user_type });
 
       if (result.success) {
         console.log(
           `User ${result.isNewUser ? "created" : "logged in"} successfully`,
         );
+        setUser(result.userId, username);
         router.push("/team");
       }
     } catch (err) {

@@ -80,6 +80,6 @@ export const joinTeamByName = mutation({
       team: team.Team_Number
     });
     
-    return { success: true, teamId: team._id };
+    return { success: true, teamId: team._id, teamNumber: team.Team_Number };
   },
 });
