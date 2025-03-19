@@ -7,6 +7,13 @@ export const get = query({
   },
 });
 
+export const getUser = query({
+  args: { id: v.id("users") },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.id);
+  },
+});
+
 export const getByUsername = query({
   args: { user: v.string() },
   handler: async (ctx, args) => {

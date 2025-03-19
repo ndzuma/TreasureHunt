@@ -61,6 +61,7 @@ export const createTeam = mutation({
       Team_Name: args.teamName,
       Score: 0,
       Time: 0,
+      In_Progress: false,
       Clue1: 0,
       Clue2: 0,
       Clue3: 0,
@@ -141,5 +142,57 @@ export const updateTime = mutation({
     await ctx.db.patch(team._id, { Time: args.time });
     
     return { success: true };
+  }
+});
+
+export const startGame = mutation({
+  args: { teamNumber: v.number() },
+  handler: async (ctx, args) => {
+    const team = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
+      .first();
+    
+    if (!team) {
+      throw new Error(`Team ${args.teamNumber} does not exist`);
+    }
+    
+    await ctx.db.patch(team._id, { In_Progress: true });
+    
+    return { success: true };
+  }
+});
+
+export const endGame = mutation({
+  args: { teamNumber: v.number() },
+  handler: async (ctx, args) => {
+    const team = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
+      .first();
+    
+    if (!team) {
+      throw new Error(`Team ${args.teamNumber} does not exist`);
+    }
+    
+    await ctx.db.patch(team._id, { In_Progress: false });
+    
+    return { success: true };
+  }
+});
+
+export const getGameStatus = query({
+  args: { teamNumber: v.number() },
+  handler: async (ctx, args) => {
+    const team = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
+      .first();
+    
+    if (!team) {
+      throw new Error(`Team ${args.teamNumber} does not exist`);
+    }
+    
+    return { inProgress: team.In_Progress };
   }
 });

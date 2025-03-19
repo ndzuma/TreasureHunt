@@ -12,6 +12,7 @@ export default defineSchema({
     Team_Name: v.string(),
     Score: v.number(),
     Time: v.number(),
+    In_Progress: v.boolean(),
     Clue1: v.optional(v.number()),
     Clue2: v.optional(v.number()),
     Clue3: v.optional(v.number()),
