@@ -233,3 +233,52 @@ export const getTeamClue = query({
     }; // there was some weird error i dont know why this works
   },
 });
+
+export const getTeamClues = query({
+  args: { teamNumber: v.number() },
+  handler: async (ctx, args) => {
+    const team = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
+      .first();
+
+    if (!team) {
+      throw new Error(`Team ${args.teamNumber} does not exist`);
+    }
+
+    const clueFields = [
+      team.Clue1,
+      team.Clue2,
+      team.Clue3,
+      team.Clue4,
+      team.Clue5,
+      team.Clue6,
+      team.Clue7,
+      team.Clue8,
+      team.Clue9,
+      team.Clue10,
+      team.Clue11,
+      team.Clue12,
+      team.Clue13,
+      team.Clue14,
+    ];
+
+    return clueFields;
+  },
+});
+
+export const getTeamScore = query({
+  args: { teamNumber: v.number() },
+  handler: async (ctx, args) => {
+    const team = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
+      .first();
+
+    if (!team) {
+      throw new Error(`Team ${args.teamNumber} does not exist`);
+    }
+
+    return team.Score;
+  },
+});

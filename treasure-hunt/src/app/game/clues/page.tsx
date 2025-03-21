@@ -5,9 +5,62 @@ import { TimeRemaining } from "~/components/time-remaining";
 import { ClueButton } from "~/components/clue-button";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
+import { MainButtonWithOnClick } from "~/components/main-button";
+import { useUserStore } from "~/store/userStore";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-export default function createCluesPage() {
+
+export default function CluesPage() {
+  const router = useRouter();
+  const userId = useUserStore((state) => state.userId);
+  const teamNumber = useUserStore((state) => state.teamNumber);
   const getAllClue = useQuery(api.clues.getAllClues);
+  const gameStatus = useQuery(api.teams.getGameStatus, { teamNumber: teamNumber });
+  const teamClues = useQuery(api.teams.getTeamClues, { teamNumber: teamNumber });
+  const teamScore = useQuery(api.teams.getTeamScore, { teamNumber: teamNumber });
+  const allCluesWereFound = teamScore === 14;
+  
+  const [mounted, setMounted] = useState(false);
+    
+  // Handle hydration issues
+  useEffect(() => {
+    setMounted(true);
+    console.log("Current user state:", {
+      userId: useUserStore.getState().userId,
+      username: useUserStore.getState().username,
+      teamNumber: useUserStore.getState().teamNumber
+    });
+  }, []);
+  
+  useEffect(() => {
+    if (mounted) {
+      if (!userId) {
+        router.push("/");
+      } else if (!teamNumber) {
+        router.push("/team");
+      } else if (gameStatus?.inProgress === false) { 
+        router.push("/game");
+      }
+    }
+  }, [userId, teamNumber, gameStatus, router, mounted]);
+  
+  // Don't render until after hydration
+  if (!mounted) {
+    return null;
+  }
+  
+  function getFinalAnswer() { 
+    let answer = 0
+    for (let i = 0; i < 14; i++) {
+      answer += Number(getAllClue![i]?.Code)
+    }
+    return answer
+  }
+  
+  function handleFinalAnswer() {
+    console.log("Start hunt");
+  }
 
   return (
     <div className="bg-[#5776A4] min-h-screen">
@@ -24,6 +77,13 @@ export default function createCluesPage() {
             />
           ))}
         </div>
+        { 
+          allCluesWereFound ? (
+            <MainButtonWithOnClick title="Final clue" onClick={handleFinalAnswer} />
+          ) : (
+            <MainButtonWithOnClick title="Final clue" onClick={handleFinalAnswer} disabled={true}/>
+          )
+        }
       </main>
     </div>
   );
