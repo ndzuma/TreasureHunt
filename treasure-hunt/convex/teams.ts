@@ -133,7 +133,7 @@ export const updateClue = mutation({
       updatedTeam.Clue14,
     ];
 
-    const newScore = clueFields.reduce((acc, val) => acc! + (val || 0), 0);
+    const newScore = clueFields.reduce((acc, val) => acc! + (val ?? 0), 0);
 
     await ctx.db.patch(team._id, { Score: newScore });
 
@@ -141,25 +141,6 @@ export const updateClue = mutation({
   },
 });
 
-export const updateTime = mutation({
-  args: { teamNumber: v.number(), time: v.number() },
-  handler: async (ctx, args) => {
-    const team = await ctx.db
-      .query("teams")
-      .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
-      .first();
-
-    if (!team) {
-      throw new Error(`Team ${args.teamNumber} does not exist`);
-    }
-
-    await ctx.db.patch(team._id, { Time: args.time });
-
-    return { success: true };
-  },
-});
-
-// start game func that also saves the start time
 export const startGame = mutation({
   args: { teamNumber: v.number() },
   handler: async (ctx, args) => {
@@ -178,7 +159,6 @@ export const startGame = mutation({
   },
 });
 
-// end game func that also saves the end time
 export const endGame = mutation({
   args: { teamNumber: v.number() },
   handler: async (ctx, args) => {
@@ -194,6 +174,30 @@ export const endGame = mutation({
     await ctx.db.patch(team._id, { In_Progress: false, EndTime: Date.now() });
 
     return { success: true };
+  },
+});
+
+export const getTimeTaken = query({
+  args: { teamNumber: v.number() },
+  handler: async (ctx, args) => {
+    const team = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
+      .first();
+
+    if (!team) {
+      throw new Error(`Team ${args.teamNumber} does not exist`);
+    }
+
+    if (!team.In_Progress) {
+      throw new Error(`Team ${args.teamNumber} is not in progress`);
+    }
+
+    if (!team.StartTime || !team.EndTime) {
+      throw new Error(`Team ${args.teamNumber} has invalid start/end times`);
+    }
+    
+    return team.EndTime - team.StartTime;
   },
 });
 
@@ -227,7 +231,7 @@ export const getTeamClue = query({
 
     const clueField = `Clue${args.clueNumber}` as const;
     return {
-      clue: (team as unknown as { [key: string]: number | undefined })[
+      clue: (team as unknown as Record<string, number | undefined>)[
         clueField
       ],
     }; // there was some weird error i dont know why this works

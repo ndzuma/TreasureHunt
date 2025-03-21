@@ -30,6 +30,19 @@ export default function HomePage() {
       return "Invalid";
     }
   }
+  
+  function valid_username() { 
+    if (username.length < 2) {
+      return false;
+    }
+    if (username.substring(0, 2).toLowerCase() != "ku" || username.charAt(0).toLowerCase() != "k") {
+      return false;
+    }
+    if (username.length > 10) {
+      return false;
+    }
+    return true;
+  }
 
   async function handleLogin() {
     if (!username) {
@@ -42,6 +55,12 @@ export default function HomePage() {
 
     const user_type = get_user_type();
     if (user_type == "Invalid") {
+      setError("Invalid username");
+      setIsLoading(false);
+      return;
+    }
+    
+    if (!valid_username()) {
       setError("Invalid username");
       setIsLoading(false);
       return;

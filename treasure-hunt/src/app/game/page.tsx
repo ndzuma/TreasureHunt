@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "~/store/userStore";
 import { useEffect, useState } from "react";
 import { api } from "../../../convex/_generated/api";
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 
 export default function GamePage() {
   const router = useRouter();
@@ -17,6 +17,7 @@ export default function GamePage() {
   const user = useQuery(api.users.getUser, { id: userId });
   // @ts-expect-error - teamNumber is handled properly at runtime
   const gameStatus = useQuery(api.teams.getGameStatus, { teamNumber: teamNumber });
+  const startGame = useMutation(api.teams.startGame);
   
   const [mounted, setMounted] = useState(false);
 
@@ -54,6 +55,7 @@ export default function GamePage() {
       console.log("No user ID or team number");
       return;
     }
+    await startGame({teamNumber: teamNumber})
     router.push("/game/clues");
   }
 

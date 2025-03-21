@@ -150,6 +150,7 @@ export default function CluePage() {
                   ]}
                   onScan={(result) => {
                     if (result && result.length > 0 && result[0]?.rawValue) {
+                      // eslint-disable-next-line @typescript-eslint/no-floating-promises
                       handleScan(result[0].rawValue);
                     } else {
                       console.log("Invalid scan result:", result);
@@ -157,6 +158,7 @@ export default function CluePage() {
                     }
                   }}
                   onError={(error) => {
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                     console.log(`onError: ${error}'`);
                   }}
                   styles={{
