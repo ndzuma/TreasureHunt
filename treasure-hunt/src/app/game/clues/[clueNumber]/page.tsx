@@ -94,9 +94,10 @@ export default function CluePage() {
   }
 
   return (
-    <div>
+    <div className="bg-[#5776A4] min-h-screen">
       <Header page="/game/clues" />
-      <main className="flex min-h-screen flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
+      <main className="flex flex-col items-center gap-3 bg-[#5776A4] px-4 text-white">
+        <h1 className="text-4xl">Clue { clueNumber }</h1>
         <TimeRemaining />
         <div className={"w-full text-black"}>
           <div className="rounded-lg border-[1px] border-black bg-[#4AA5FF] p-2">
