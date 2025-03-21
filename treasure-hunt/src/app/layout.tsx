@@ -1,6 +1,7 @@
 import "~/styles/globals.css";
 
 import { ConvexClientProvider } from "./ConvexClientProvider";
+import { Toaster } from "~/components/ui/sonner"
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <ConvexClientProvider>{children}</ConvexClientProvider>
+        <Toaster />
       </body>
     </html>
   );

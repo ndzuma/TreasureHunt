@@ -32,30 +32,34 @@ export const getByNumber = query({
 export const getNextTeamNumber = query({
   handler: async (ctx) => {
     const teams = await ctx.db.query("teams").collect();
-    
+
     if (teams.length === 0) {
       return 1;
     }
-    
+
     // Find the highest team number and add 1
-    const highestTeamNumber = Math.max(...teams.map(team => team.Team_Number));
+    const highestTeamNumber = Math.max(
+      ...teams.map((team) => team.Team_Number),
+    );
     return highestTeamNumber + 1;
   },
 });
 
 export const createTeam = mutation({
-    args: {
+  args: {
     teamName: v.string(),
-    creatorId: v.id("users")
+    creatorId: v.id("users"),
   },
   handler: async (ctx, args) => {
     const teams = await ctx.db.query("teams").collect();
     let nextTeamNumber = 1;
     if (teams.length > 0) {
-      const highestTeamNumber = Math.max(...teams.map(team => team.Team_Number));
+      const highestTeamNumber = Math.max(
+        ...teams.map((team) => team.Team_Number),
+      );
       nextTeamNumber = highestTeamNumber + 1;
     }
-    
+
     const teamId = await ctx.db.insert("teams", {
       Team_Number: nextTeamNumber,
       Team_Name: args.teamName,
@@ -75,13 +79,13 @@ export const createTeam = mutation({
       Clue11: 0,
       Clue12: 0,
       Clue13: 0,
-      Clue14: 0
+      Clue14: 0,
     });
-    
+
     await ctx.db.patch(args.creatorId, {
-      team: nextTeamNumber
+      team: nextTeamNumber,
     });
-    
+
     return { success: true, teamId, teamNumber: nextTeamNumber };
   },
 });
@@ -90,39 +94,49 @@ export const updateClue = mutation({
   args: {
     teamNumber: v.number(),
     clueNumber: v.number(),
-    value: v.number()
+    value: v.number(),
   },
   handler: async (ctx, args) => {
     const { teamNumber, clueNumber, value } = args;
-    
+
     const team = await ctx.db
       .query("teams")
       .filter((q) => q.eq(q.field("Team_Number"), teamNumber))
       .first();
-    
+
     if (!team) {
       throw new Error(`Team ${teamNumber} does not exist`);
     }
-    
+
     if (clueNumber < 1 || clueNumber > 14) {
       throw new Error("Invalid clue number. Must be between 1 and 14.");
     }
-    
+
     const updateField = `Clue${clueNumber}`;
     await ctx.db.patch(team._id, { [updateField]: value });
-    
-    const updatedTeam = await ctx.db.get(team._id);
+
+    const updatedTeam = (await ctx.db.get(team._id))!;
     const clueFields = [
-      updatedTeam.Clue1, updatedTeam.Clue2, updatedTeam.Clue3, updatedTeam.Clue4,
-      updatedTeam.Clue5, updatedTeam.Clue6, updatedTeam.Clue7, updatedTeam.Clue8,
-      updatedTeam.Clue9, updatedTeam.Clue10, updatedTeam.Clue11, updatedTeam.Clue12,
-      updatedTeam.Clue13, updatedTeam.Clue14
+      updatedTeam.Clue1,
+      updatedTeam.Clue2,
+      updatedTeam.Clue3,
+      updatedTeam.Clue4,
+      updatedTeam.Clue5,
+      updatedTeam.Clue6,
+      updatedTeam.Clue7,
+      updatedTeam.Clue8,
+      updatedTeam.Clue9,
+      updatedTeam.Clue10,
+      updatedTeam.Clue11,
+      updatedTeam.Clue12,
+      updatedTeam.Clue13,
+      updatedTeam.Clue14,
     ];
-    
-    const newScore = clueFields.reduce((acc, val) => acc + (val || 0), 0);
-    
+
+    const newScore = clueFields.reduce((acc, val) => acc! + (val || 0), 0);
+
     await ctx.db.patch(team._id, { Score: newScore });
-    
+
     return { success: true, newScore };
   },
 });
@@ -134,15 +148,15 @@ export const updateTime = mutation({
       .query("teams")
       .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
       .first();
-    
+
     if (!team) {
       throw new Error(`Team ${args.teamNumber} does not exist`);
     }
-    
+
     await ctx.db.patch(team._id, { Time: args.time });
-    
+
     return { success: true };
-  }
+  },
 });
 
 // start game func that also saves the start time
@@ -153,15 +167,15 @@ export const startGame = mutation({
       .query("teams")
       .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
       .first();
-    
+
     if (!team) {
       throw new Error(`Team ${args.teamNumber} does not exist`);
     }
-    
+
     await ctx.db.patch(team._id, { In_Progress: true, StartTime: Date.now() });
-    
+
     return { success: true };
-  }
+  },
 });
 
 // end game func that also saves the end time
@@ -172,17 +186,16 @@ export const endGame = mutation({
       .query("teams")
       .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
       .first();
-    
+
     if (!team) {
       throw new Error(`Team ${args.teamNumber} does not exist`);
     }
-    
+
     await ctx.db.patch(team._id, { In_Progress: false, EndTime: Date.now() });
-    
+
     return { success: true };
-  }
+  },
 });
- 
 
 export const getGameStatus = query({
   args: { teamNumber: v.number() },
@@ -191,11 +204,32 @@ export const getGameStatus = query({
       .query("teams")
       .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
       .first();
-    
+
     if (!team) {
       throw new Error(`Team ${args.teamNumber} does not exist`);
     }
-    
+
     return { inProgress: team.In_Progress };
-  }
+  },
+});
+
+export const getTeamClue = query({
+  args: { teamNumber: v.number(), clueNumber: v.number() },
+  handler: async (ctx, args) => {
+    const team = await ctx.db
+      .query("teams")
+      .filter((q) => q.eq(q.field("Team_Number"), args.teamNumber))
+      .first();
+
+    if (!team) {
+      throw new Error(`Team ${args.teamNumber} does not exist`);
+    }
+
+    const clueField = `Clue${args.clueNumber}` as const;
+    return {
+      clue: (team as unknown as { [key: string]: number | undefined })[
+        clueField
+      ],
+    }; // there was some weird error i dont know why this works
+  },
 });

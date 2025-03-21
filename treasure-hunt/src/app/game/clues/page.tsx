@@ -1,11 +1,9 @@
 "use client"
 import { Header } from "~/components/header";
-import Image from "next/image";
 import { TimeRemaining } from "~/components/time-remaining";
 import { ClueButton } from "~/components/clue-button";
-import { getAllClues } from "convex/clues";
 import { useQuery } from "convex/react";
-import { api } from "convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 
 
 
@@ -13,10 +11,8 @@ import { api } from "convex/_generated/api";
 
 
 export default function  createCluesPage() {
-    
     const getAllClue = useQuery(api.clues.getAllClues);
     
-
     return (
       <div>
         <Header page="/" />

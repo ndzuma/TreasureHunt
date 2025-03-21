@@ -6,14 +6,16 @@ import { TeamMembersCard  } from "~/components/team-member-card";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "~/store/userStore";
 import { useEffect, useState } from "react";
-import { api } from "convex/_generated/api";
+import { api } from "../../../convex/_generated/api";
 import { useQuery } from "convex/react";
 
 export default function GamePage() {
   const router = useRouter();
   const userId = useUserStore((state) => state.userId);
   const teamNumber = useUserStore((state) => state.teamNumber);
+  // @ts-expect-error - userId is handled properly at runtime
   const user = useQuery(api.users.getUser, { id: userId });
+  // @ts-expect-error - teamNumber is handled properly at runtime
   const gameStatus = useQuery(api.teams.getGameStatus, { teamNumber: teamNumber });
   
   const [mounted, setMounted] = useState(false);
