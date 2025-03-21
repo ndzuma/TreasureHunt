@@ -49,6 +49,11 @@ export default function HomePage() {
       setError("Username cannot be empty");
       return;
     }
+    
+    if (!password) {
+      setError("Password cannot be empty");
+      return;
+    }
 
     setIsLoading(true);
     setError("");
