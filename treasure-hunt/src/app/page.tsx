@@ -35,7 +35,7 @@ export default function HomePage() {
     if (username.length < 2) {
       return false;
     }
-    if (username.substring(0, 2).toLowerCase() != "ku" || username.charAt(0).toLowerCase() != "k") {
+    if (username.substring(0, 2).toLowerCase() != "ku" && username.charAt(0).toLowerCase() != "k") {
       return false;
     }
     if (username.length > 10) {
@@ -74,7 +74,12 @@ export default function HomePage() {
           `User ${result.isNewUser ? "created" : "logged in"} successfully`,
         );
         setUser(result.userId, username);
-        router.push("/team");
+        
+        if (user_type == "Lecturer") {
+          router.push("/scoreboard");
+        } else {
+          router.push("/team");
+        }
       }
     } catch (err) {
       console.error("Login error:", err);

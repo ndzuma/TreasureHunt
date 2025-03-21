@@ -1,13 +1,25 @@
 "use client";
 
 import { Header } from "~/components/header";
-import { TimeRemaining } from "~/components/time-remaining";
+import { TimeTaken } from "~/components/time-taken";
 import { ClueButton } from "~/components/clue-button";
 import { useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useUserStore } from "~/store/userStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+function convertSecondsToTime(milliseconds: number) {
+  if (!milliseconds) {
+    return "00:00:00";
+  }
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
+  return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
 
 
 export default function SummaryPage() {
@@ -16,7 +28,8 @@ export default function SummaryPage() {
   const teamNumber = useUserStore((state) => state.teamNumber);
   const getAllClue = useQuery(api.clues.getAllClues);
   const teamScore = useQuery(api.teams.getTeamScore, { teamNumber: teamNumber! });
-    const allCluesWereFound = teamScore === 14;
+  const timeTaken = useQuery(api.teams.getTimeTaken, { teamNumber: teamNumber! });
+  const allCluesWereFound = teamScore === 14;
   
   const [mounted, setMounted] = useState(false);
     
@@ -52,7 +65,7 @@ export default function SummaryPage() {
       <Header page="/team" />
       <main className="flex flex-col items-center justify-top gap-3 px-4 text-white">
         <h1 className="text-4xl">Clues</h1>
-        <TimeRemaining />
+        <TimeTaken timeTaken={convertSecondsToTime(timeTaken!)} />
         <div className="grid grid-cols-2 gap-4">
           {getAllClue?.map((clue) => (
             <ClueButton
