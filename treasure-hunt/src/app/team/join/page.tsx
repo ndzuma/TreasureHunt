@@ -72,7 +72,6 @@ export default function CreatePage() {
       <main className="flex min-h-screen flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
         <Image src="/logo.png" width={200} height={200} alt="Some" />
         <h1 className="text-4xl font-bold">Join a Team</h1>
-        {/* @ts-expect-error - teamName is handled properly at runtime */}
         <InputTeamName onchange={handleTeamNameChange} />
         <MainButtonWithOnClick title="Join Team" onClick={handleJoinTeam} />
       </main>

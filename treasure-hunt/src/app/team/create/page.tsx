@@ -57,7 +57,6 @@ export default function CreatePage() {
       <Header page="/team" />
       <main className="flex min-h-screen flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
         <h1 className="text-4xl font-bold">Create a Team</h1>
-        {/* @ts-expect-error - teamName is handled properly at runtime */}
         <InputTeamName onchange={handleTeamNameChange} />
         <MainButtonWithOnClick title="Create Team" onClick={CreateTeam} />
       </main>
