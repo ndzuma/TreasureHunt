@@ -39,7 +39,7 @@ export default function CluesPage() {
         router.push("/");
       } else if (!teamNumber) {
         router.push("/team");
-      } else if (allCluesWereFound) {
+      } else if (allCluesWereFound && gameStatus?.inProgress === false) {
         router.push("/game/summary");
       } else if (gameStatus?.inProgress === false) { 
         router.push("/game");
