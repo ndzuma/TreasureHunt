@@ -60,9 +60,9 @@ export default function GamePage() {
   }
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#5776A4]">
       <Header page="/team" />
-      <main className="flex min-h-screen flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
+      <main className="flex min-h-[50vh] flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
         <h1 className="text-4xl font-bold">Game Lobby</h1>
         <TeamMembersCard teamNumber={teamNumber} />
         { 

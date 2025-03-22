@@ -67,9 +67,9 @@ export default function CreatePage() {
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#5776A4]">
       <Header page="/team" />
-      <main className="flex min-h-screen flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
+      <main className="flex min-h-[50vh] flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
         <Image src="/logo.png" width={200} height={200} alt="Some" />
         <h1 className="text-4xl font-bold">Join a Team</h1>
         <InputTeamName onchange={handleTeamNameChange} />
