@@ -61,9 +61,9 @@ export default function SummaryPage() {
   }
 
   return (
-    <div className="bg-[#5776A4] min-h-screen">
+    <div className="bg-[#5776A4] min-h-[100dvh]">
       <Header page="/team" />
-      <main className="flex flex-col items-center justify-top gap-3 px-4 text-white">
+      <main className="flex flex-col items-center justify-top gap-3 px-4 text-white pb-6">
         <h1 className="text-4xl">Clues</h1>
         <TimeTaken timeTaken={convertSecondsToTime(timeTaken!)} />
         <div className="grid grid-cols-2 gap-4">

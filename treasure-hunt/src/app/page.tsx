@@ -95,7 +95,7 @@ export default function HomePage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
+    <main className="flex min-h-[100dvh] flex-col items-center justify-top gap-2.5 bg-[#5776A4] px-6 text-white pt-16">
       <h1 className="text-4xl font-bold">QuestConnect</h1>
       <Image src="/logo.png" width={200} height={200} alt="Some" />
       <div className="w-full">

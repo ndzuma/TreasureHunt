@@ -28,7 +28,7 @@ export default function HomePage() {
     router.push("/");
   }
   return (
-    <div className="min-h-screen bg-[#5776A4]">
+    <div className="min-h-[100dvh] bg-[#5776A4]">
       <Header page="/" />
       <main className="flex min-h-[50vh] flex-col items-center justify-center gap-2.5 bg-[#5776A4] px-6 text-white">
         <h1 className="text-4xl font-bold">QuestConnect</h1>

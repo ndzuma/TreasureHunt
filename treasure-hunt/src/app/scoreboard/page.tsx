@@ -47,9 +47,9 @@ export default function ScorecardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#5776A4]">
+    <div className="min-h-[100dvh] bg-[#5776A4]">
       <Header page="/" />
-      <main className="flex flex-col items-center gap-3 bg-[#5776A4] px-4 text-white">
+      <main className="flex flex-col items-center gap-3 bg-[#5776A4] px-4 text-white pb-6">
         <h1 className="text-4xl">Scoreboard</h1>
         <div className={"flex flex-row w-full text-black"}>
           <div className="w-full">
