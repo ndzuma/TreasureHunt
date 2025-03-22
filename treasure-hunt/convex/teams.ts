@@ -189,12 +189,8 @@ export const getTimeTaken = query({
       throw new Error(`Team ${args.teamNumber} does not exist`);
     }
 
-    if (!team.In_Progress) {
-      throw new Error(`Team ${args.teamNumber} is not in progress`);
-    }
-
     if (!team.StartTime || !team.EndTime) {
-      throw new Error(`Team ${args.teamNumber} has invalid start/end times`);
+      return 0;
     }
     
     return team.EndTime - team.StartTime;
