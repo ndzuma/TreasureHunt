@@ -9,6 +9,7 @@ import { useUserStore } from "~/store/userStore";
 import { api } from "../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 
 export default function CreatePage() {
@@ -42,7 +43,10 @@ export default function CreatePage() {
       if (newTeam.success == true) {
         console.log("Team created successfully:", newTeam);
         setTeam(newTeam.teamNumber);
+        toast.success("Team created successfully");
         router.push("/game"); //page name here
+      } else if (newTeam.success == false) {
+        toast.error("Team already exists");
       }
     } catch (err) {
       console.error("Create a team error", err);

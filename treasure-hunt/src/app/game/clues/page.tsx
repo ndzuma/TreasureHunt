@@ -14,12 +14,14 @@ import { useRouter } from "next/navigation";
 export default function CluesPage() {
   const router = useRouter();
   const userId = useUserStore((state) => state.userId);
+  const username = useUserStore((state) => state.username);
   const teamNumber = useUserStore((state) => state.teamNumber);
   const getAllClue = useQuery(api.clues.getAllClues);
   const gameStatus = useQuery(api.teams.getGameStatus, { teamNumber: teamNumber! });
   const teamScore = useQuery(api.teams.getTeamScore, { teamNumber: teamNumber! });
   const endGame = useMutation(api.teams.endGame);
   const allCluesWereFound = teamScore === 14;
+  const [isLecturer, setIsLecturer] = useState(false);
   
   const [mounted, setMounted] = useState(false);
     
@@ -46,6 +48,12 @@ export default function CluesPage() {
       }
     }
   }, [userId, teamNumber, gameStatus, allCluesWereFound, router, mounted]);
+  
+  useEffect(() => {
+    if (username?.substring(0, 2).toLowerCase() === "ku") {
+      setIsLecturer(true);
+    }
+  }, [username, setIsLecturer]);
   
   // Don't render until after hydration
   if (!mounted) {
@@ -79,6 +87,12 @@ export default function CluesPage() {
             <MainButtonWithOnClick title="Done" onClick={handleFinishGame} disabled={true}/>
           )
         }
+        {
+          isLecturer ? (
+            <MainButtonWithOnClick title="Finish Game" onClick={handleFinishGame} />
+          ) : null
+        }
+        
       </main>
     </div>
   );

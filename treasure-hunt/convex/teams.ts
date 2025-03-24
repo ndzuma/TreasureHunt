@@ -59,6 +59,12 @@ export const createTeam = mutation({
       );
       nextTeamNumber = highestTeamNumber + 1;
     }
+    
+    // check if team already exists
+    const existingTeam = await ctx.db.query("teams").filter((q) => q.eq(q.field("Team_Name"), args.teamName)).first();
+    if (existingTeam) {
+      return { success: false, teamNumber: 0 }
+    }
 
     const teamId = await ctx.db.insert("teams", {
       Team_Number: nextTeamNumber,

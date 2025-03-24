@@ -9,6 +9,7 @@ import { useUserStore } from "~/store/userStore";
 import { useEffect, useState } from "react";
 import { useMutation } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
+import { toast } from "sonner";
 
 export default function CreatePage() {
   const [teamName, setTeamName] = useState("");
@@ -55,6 +56,7 @@ export default function CreatePage() {
       if (result.success) {
         const teamNumber = result.teamNumber || 0;
         setTeam(teamNumber);
+        toast.success("Team created successfully");
         router.push("/game");
       }
     } catch (err) {
