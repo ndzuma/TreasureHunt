@@ -19,6 +19,7 @@ export default function CluesPage() {
   const getAllClue = useQuery(api.clues.getAllClues);
   const gameStatus = useQuery(api.teams.getGameStatus, { teamNumber: teamNumber! });
   const teamScore = useQuery(api.teams.getTeamScore, { teamNumber: teamNumber! });
+  const teamData = useQuery(api.teams.getByNumber, { teamNumber: teamNumber! });
   const endGame = useMutation(api.teams.endGame);
   const allCluesWereFound = teamScore === 14;
   const [isLecturer, setIsLecturer] = useState(false);
@@ -72,13 +73,19 @@ export default function CluesPage() {
         <h1 className="text-4xl">Clues</h1>
         <TimeRemaining />
         <div className="grid grid-cols-2 gap-4">
-          {getAllClue?.map((clue) => (
-            <ClueButton
-              key={clue._id}
-              title={"Clue " + clue.Clue_Number}
-              number={clue.Clue_Number}
-            />
-          ))}
+          {getAllClue?.map((clue) => {
+            // @ts-expect-error - Ignore type error for teamData
+            const clueValue = teamData?.[`Clue${clue.Clue_Number}`] as number;
+            const clueStatus = clueValue === 1;
+            return (
+              <ClueButton
+                key={clue._id}
+                title={"Clue " + clue.Clue_Number}
+                number={clue.Clue_Number}
+                isFound={clueStatus}
+              />
+            )
+          })}
         </div>
         { 
           allCluesWereFound ? (
