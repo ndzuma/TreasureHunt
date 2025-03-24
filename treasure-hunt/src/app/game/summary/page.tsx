@@ -49,8 +49,6 @@ export default function SummaryPage() {
         router.push("/");
       } else if (!teamNumber) {
         router.push("/team");
-      } else if (!allCluesWereFound) {
-        router.push("/game/clues");
       }
     }
   }, [userId, teamNumber, allCluesWereFound, router, mounted]);
