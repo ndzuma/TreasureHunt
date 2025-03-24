@@ -29,6 +29,7 @@ export default function SummaryPage() {
   const getAllClue = useQuery(api.clues.getAllClues);
   const teamScore = useQuery(api.teams.getTeamScore, { teamNumber: teamNumber! });
   const timeTaken = useQuery(api.teams.getTimeTaken, { teamNumber: teamNumber! });
+  const teamData = useQuery(api.teams.getByNumber, { teamNumber: teamNumber! });
   const allCluesWereFound = teamScore === 14;
   
   const [mounted, setMounted] = useState(false);
@@ -65,13 +66,19 @@ export default function SummaryPage() {
         <h1 className="text-4xl">Clues</h1>
         <TimeTaken timeTaken={convertSecondsToTime(timeTaken!)} />
         <div className="grid grid-cols-2 gap-4">
-          {getAllClue?.map((clue) => (
-            <ClueButton
-              key={clue._id}
-              title={"Clue " + clue.Clue_Number}
-              number={clue.Clue_Number}
-            />
-          ))}
+          {getAllClue?.map((clue) => {
+            // @ts-expect-error - Ignore type error for teamData
+            const clueValue = teamData?.[`Clue${clue.Clue_Number}`] as number;
+            const clueStatus = clueValue === 1;
+            return (
+              <ClueButton
+                key={clue._id}
+                title={"Clue " + clue.Clue_Number}
+                number={clue.Clue_Number}
+                isFound={clueStatus}
+              />
+            )
+          })}
         </div>
       </main>
     </div>
