@@ -7,9 +7,11 @@ type UserStore = {
   userId: string | null;
   username: string | null;
   teamNumber: number | null;
+  timeRemaining: number;
   setUser: (userId: string, username: string, teamNumber?: number | null) => void;
   updateTeam: (teamNumber: number) => void;
   clearUser: () => void;
+  setTimeRemaining: (time: number) => void;
 };
 
 export const useUserStore = create<UserStore>()(
@@ -18,12 +20,15 @@ export const useUserStore = create<UserStore>()(
       userId: null,
       username: null,
       teamNumber: null,
+      timeRemaining: 3600,
       setUser: (userId, username, teamNumber = null) => 
         set({ userId, username, teamNumber }),
       updateTeam: (teamNumber) => 
         set({ teamNumber }),
       clearUser: () => 
-        set({ userId: null, username: null, teamNumber: null }),
+        set({ userId: null, username: null, teamNumber: null, timeRemaining: 3600 }),
+      setTimeRemaining: (time) =>
+              set({ timeRemaining: time }),
     }),
     {
       name: 'user-storage',
@@ -31,7 +36,8 @@ export const useUserStore = create<UserStore>()(
       partialize: (state) => ({ 
         userId: state.userId, 
         username: state.username,
-        teamNumber: state.teamNumber 
+        teamNumber: state.teamNumber,
+        timeRemaining: state.timeRemaining
       }),
     }
   )
